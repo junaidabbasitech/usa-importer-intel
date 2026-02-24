@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = process.env.VITE_API_URL || ""; // <- relative path works in production
+// Use relative path, works in production
+const API_URL = ""; // <- relative, no localhost
 
 export const scrapeTraditionalSources = async (query: string) => {
   try {

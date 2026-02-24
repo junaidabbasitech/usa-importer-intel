@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ShipmentScraper } from './scraper.js';
-import { searchImporters } from './services/geminiService.js'; // ✅ server-side only
+import { searchImporters } from './services/geminiService.js';
 
 const router = Router();
 
@@ -32,7 +32,7 @@ router.get('/scrape', async (req, res) => {
   }
 });
 
-// ✅ Gemini AI importer search
+// Gemini AI importer search
 router.get('/search-importers', async (req, res) => {
   try {
     const { query, city = '', state = '', industry = '' } = req.query;
