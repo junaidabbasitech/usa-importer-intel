@@ -3,13 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "concurrently \"vite\" \"tsx server/server.ts\"",
-    "build": "vite build && tsc -p tsconfig.server.json",
-    "start": "node --loader tsx dist/server/server.ts",
-    "preview": "vite preview",
-    "lint": "tsc --noEmit"
-  },
+"scripts": {
+  "dev": "concurrently \"vite\" \"tsx server/server.ts\"",
+  "build": "vite build && tsc -p tsconfig.server.json",
+  "start": "tsx dist/server/server.ts",
+  "preview": "vite preview",
+  "lint": "tsc --noEmit"
+},
   "dependencies": {
     "@google/genai": "^1.29.0",
     "axios": "^1.13.2",
