@@ -51,7 +51,11 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries: number = 3, initia
 
 export const searchImporters = async (params: { query: string; city: string; state: string; industry: string; }): Promise<ImporterSummary[]> => {
   const { query, city, state, industry } = params;
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const geminiKey = process.env.GEMINI_API_KEY;
+if (!geminiKey) {
+  throw new Error("GEMINI_API_KEY is not defined in environment variables!");
+}
+const ai = new GoogleGenAI({ apiKey: geminiKey });
   const today = new Date().toISOString().split('T')[0];
 
   try {
@@ -114,7 +118,11 @@ export const fetchDetailedImporterData = async (importerName: string, context?: 
   const today = new Date().toISOString().split('T')[0];
   
   const fetchTask = async () => {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const geminiKey = process.env.GEMINI_API_KEY;
+if (!geminiKey) {
+  throw new Error("GEMINI_API_KEY is not defined in environment variables!");
+}
+const ai = new GoogleGenAI({ apiKey: geminiKey });
     
     const prompt = `TODAY'S DATE: ${today}.
     Act as a Master Trade Auditor. Exhaustively SCRAPE data for: '${importerName}' from https://www.importyeti.com/ and CBP logs.
@@ -182,7 +190,11 @@ export const fetchDetailedImporterData = async (importerName: string, context?: 
 };
 
 export const searchSimilarImporters = async (query: string): Promise<ImporterSummary[]> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const geminiKey = process.env.GEMINI_API_KEY;
+if (!geminiKey) {
+  throw new Error("GEMINI_API_KEY is not defined in environment variables!");
+}
+const ai = new GoogleGenAI({ apiKey: geminiKey });
   const today = new Date().toISOString().split('T')[0];
   
   try {
