@@ -9,7 +9,7 @@ dotenv.config();
 
 async function startServer() {
   const app = express();
-  const PORT = Number(process.env.PORT) || 3000; // ✅ convert to number
+  const PORT = Number(process.env.PORT) || 3000;
 
   app.use(cors());
   app.use(express.json());
@@ -29,8 +29,8 @@ async function startServer() {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
 
-    // Catch-all for SPA routing (Express v5 requires '/*')
-    app.get("/*", (req, res) => {
+    // Catch-all route for SPA (Express v5 compatible)
+    app.get("/:path*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
