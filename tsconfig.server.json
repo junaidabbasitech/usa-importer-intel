@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "dist/server",
-    "rootDir": "server",
     "module": "ESNext",
     "target": "ES2022",
     "moduleResolution": "Node",
@@ -10,5 +9,5 @@
     "skipLibCheck": true,
     "sourceMap": true
   },
-  "include": ["server/**/*.ts"]
+  "include": ["server/**/*.ts", "types.ts"]
 }
