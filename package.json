@@ -5,8 +5,8 @@
   "type": "module",
 "scripts": {
   "dev": "concurrently \"vite\" \"tsx server/server.ts\"",
-  "build": "vite build && tsc -p tsconfig.server.json",
-  "start": "tsx dist/server/server.ts",
+  "build": "vite build",
+  "start": "tsx server/server.ts",
   "preview": "vite preview",
   "lint": "tsc --noEmit"
 },
