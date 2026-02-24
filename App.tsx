@@ -1,7 +1,7 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { searchImporters, fetchDetailedImporterData, searchSimilarImporters } from './services/geminiService';
-import { checkBackendHealth } from './services/backendService';
+import { searchImporters, fetchDetailedImporterData, searchSimilarImporters } from './server/services/geminiService';
+import { checkBackendHealth } from './server/services/backendService';
 import type { ImporterSummary, DetailedImporterResult, Subscription, Notification, ContactInfo, ParsedImporterData, Theme } from './types';
 import { ImporterCard } from './components/ImporterCard';
 import { ImporterSummaryCard } from './components/ImporterSummaryCard';

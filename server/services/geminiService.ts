@@ -1,6 +1,6 @@
 
 import { GoogleGenAI } from "@google/genai";
-import type { ImporterSummary, DetailedImporterResult, Source } from '../types';
+import type { ImporterSummary, DetailedImporterResult, Source } from '../../types';
 
 /**
  * Clean JSON string from model response for parsing.
@@ -51,7 +51,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries: number = 3, initia
 
 export const searchImporters = async (params: { query: string; city: string; state: string; industry: string; }): Promise<ImporterSummary[]> => {
   const { query, city, state, industry } = params;
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const today = new Date().toISOString().split('T')[0];
 
   try {
@@ -114,7 +114,7 @@ export const fetchDetailedImporterData = async (importerName: string, context?: 
   const today = new Date().toISOString().split('T')[0];
   
   const fetchTask = async () => {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     
     const prompt = `TODAY'S DATE: ${today}.
     Act as a Master Trade Auditor. Exhaustively SCRAPE data for: '${importerName}' from https://www.importyeti.com/ and CBP logs.
@@ -182,7 +182,7 @@ export const fetchDetailedImporterData = async (importerName: string, context?: 
 };
 
 export const searchSimilarImporters = async (query: string): Promise<ImporterSummary[]> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const today = new Date().toISOString().split('T')[0];
   
   try {
