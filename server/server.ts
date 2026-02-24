@@ -30,9 +30,9 @@ async function startServer() {
     app.use(express.static(distPath));
 
     // SPA catch-all
-    app.get("*", (req, res) => {
-      res.sendFile(path.resolve(distPath, "index.html"));
-    });
+    app.use((req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../index.html'))
+});
   }
 
   app.listen(PORT, "0.0.0.0", () => {
