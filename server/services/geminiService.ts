@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import type { ImporterSummary, DetailedImporterResult, Source } from '../../types';
 
@@ -49,13 +48,14 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries: number = 3, initia
     throw new Error("Max attempts exceeded.");
 }
 
+/**
+ * Search importers using Gemini AI
+ */
 export const searchImporters = async (params: { query: string; city: string; state: string; industry: string; }): Promise<ImporterSummary[]> => {
   const { query, city, state, industry } = params;
   const geminiKey = process.env.GEMINI_API_KEY;
-if (!geminiKey) {
-  throw new Error("GEMINI_API_KEY is not defined in environment variables!");
-}
-const ai = new GoogleGenAI({ apiKey: geminiKey!});
+  if (!geminiKey) throw new Error("GEMINI_API_KEY is not defined!");
+  const ai = new GoogleGenAI({ apiKey: geminiKey! });
   const today = new Date().toISOString().split('T')[0];
 
   try {
@@ -82,9 +82,7 @@ const ai = new GoogleGenAI({ apiKey: geminiKey!});
       const aiSearchResponse = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: aiSearchPrompt,
-        config: {
-            tools: [{ googleSearch: {} }],
-        },
+        config: { tools: [{ googleSearch: {} }] },
       });
 
       const sources = extractSources(aiSearchResponse);
@@ -95,7 +93,7 @@ const ai = new GoogleGenAI({ apiKey: geminiKey!});
       
       IMPORTANT: KEEP case-distinct duplicates if they represent different registry profiles.
       Sorting: Exact/Partial matches for "${query}" MUST be at the top.
-      Data: ${aiSearchResponse.text}
+      Data: ${aiSearchResponse.text ?? ""}
       `;
 
       const finalResponse = await ai.models.generateContent({
@@ -114,16 +112,17 @@ const ai = new GoogleGenAI({ apiKey: geminiKey!});
   }
 };
 
+/**
+ * Fetch detailed importer data
+ */
 export const fetchDetailedImporterData = async (importerName: string, context?: ImporterSummary): Promise<DetailedImporterResult> => {
   const today = new Date().toISOString().split('T')[0];
-  
+
   const fetchTask = async () => {
     const geminiKey = process.env.GEMINI_API_KEY;
-if (!geminiKey) {
-  throw new Error("GEMINI_API_KEY is not defined in environment variables!");
-}
-const ai = new GoogleGenAI({ apiKey: geminiKey! });
-    
+    if (!geminiKey) throw new Error("GEMINI_API_KEY is not defined!");
+    const ai = new GoogleGenAI({ apiKey: geminiKey! });
+
     const prompt = `TODAY'S DATE: ${today}.
     Act as a Master Trade Auditor. Exhaustively SCRAPE data for: '${importerName}' from https://www.importyeti.com/ and CBP logs.
     
@@ -161,19 +160,16 @@ const ai = new GoogleGenAI({ apiKey: geminiKey! });
       "contact": { "phone": "...", "email": "...", "website": "...", "address": "..." },
       "riskAssessment": { "financialStability": "Stable", "regulatoryCompliance": "High", "geopoliticalRisk": "Low" }
     }`;
-    
+
     const response = await ai.models.generateContent({
       model: "gemini-3-pro-preview",
       contents: prompt,
-      config: {
-        tools: [{ googleSearch: {} }],
-        thinkingConfig: { thinkingBudget: 16000 }
-      },
+      config: { tools: [{ googleSearch: {} }], thinkingConfig: { thinkingBudget: 16000 } },
     });
 
     const jsonText = cleanJsonString(response.text ?? "{}");
     const parsedData = JSON.parse(jsonText);
-    
+
     return {
       parsedData: {
         ...parsedData,
@@ -189,14 +185,15 @@ const ai = new GoogleGenAI({ apiKey: geminiKey! });
   }
 };
 
+/**
+ * Search similar importers
+ */
 export const searchSimilarImporters = async (query: string): Promise<ImporterSummary[]> => {
   const geminiKey = process.env.GEMINI_API_KEY;
-if (!geminiKey) {
-  throw new Error("GEMINI_API_KEY is not defined in environment variables!");
-}
-const ai = new GoogleGenAI({ apiKey: geminiKey });
+  if (!geminiKey) throw new Error("GEMINI_API_KEY is not defined!");
+  const ai = new GoogleGenAI({ apiKey: geminiKey! });
   const today = new Date().toISOString().split('T')[0];
-  
+
   try {
     const prompt = `CURRENT DATE: ${today}. Find competitors for: "${query}". Return JSON: { "importers": [ { "importerName": "Name", "location": "...", "primaryCommodities": "...", "lastShipmentDate": "..." } ] }`;
     const response = await ai.models.generateContent({
@@ -204,7 +201,8 @@ const ai = new GoogleGenAI({ apiKey: geminiKey });
         contents: prompt,
         config: { tools: [{ googleSearch: {} }] },
     });
-    const parsed = JSON.parse(cleanJsonString(response.text));
+
+    const parsed = JSON.parse(cleanJsonString(response.text ?? "{}"));
     return (parsed.importers || []).map((imp: any) => ({ ...imp }));
   } catch (error) {
     return [];
