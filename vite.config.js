@@ -1,4 +1,3 @@
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
@@ -12,19 +11,27 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
       server: {
-  port: 5173,
-  host: '0.0.0.0',
-  proxy: {
-    "/api": {
-      target: "http://localhost:3000",
-      changeOrigin: true
-    }
-  }
-},
+        port: 5173,
+        host: '0.0.0.0',
+        proxy: {
+          "/api": {
+            target: "http://localhost:3000",
+            changeOrigin: true
+          }
+        }
+      },
       plugins: [react()],
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
+        }
+      },
+      build: {
+        cssMinify: true,
+        rollupOptions: {
+          output: {
+            manualChunks: undefined
+          }
         }
       }
     };

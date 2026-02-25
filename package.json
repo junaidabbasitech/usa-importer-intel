@@ -3,14 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  
-"scripts": {
-  "dev": "concurrently \"vite\" \"tsx server/server.ts\"",
-  "build": "vite build && tsc -p tsconfig.server.json",
-  "start": "node dist/server/server/server.js",
-  "preview": "vite preview",
-  "lint": "tsc --noEmit"
-},
+  "scripts": {
+    "dev": "concurrently \"vite\" \"tsx server/server.ts\"",
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "start": "node dist/server/server/server.js",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
   "dependencies": {
     "@google/genai": "^1.29.0",
     "axios": "^1.13.2",
@@ -27,10 +26,10 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-react": "^5.1.4",
     "concurrently": "^9.2.1",
     "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "typescript": "^5.8.2",
+    "vite": "^6.4.1"
   }
 }
