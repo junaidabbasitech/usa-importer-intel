@@ -80,7 +80,7 @@ export const searchImporters = async (params: { query: string; city: string; sta
       `;
 
       const aiSearchResponse = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: aiSearchPrompt,
         config: { tools: [{ googleSearch: {} }] },
       });
@@ -97,7 +97,7 @@ export const searchImporters = async (params: { query: string; city: string; sta
       `;
 
       const finalResponse = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: cleaningPrompt,
       });
 
@@ -108,7 +108,7 @@ export const searchImporters = async (params: { query: string; city: string; sta
       }));
   } catch (error: any) {
       console.error("Error in searchImporters:", error);
-      return [];
+      throw new Error(error.message || "Failed to search importers. Please check your API key and try again.");
   }
 };
 
@@ -162,9 +162,9 @@ export const fetchDetailedImporterData = async (importerName: string, context?: 
     }`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview",
+      model: "gemini-2.5-flash",
       contents: prompt,
-      config: { tools: [{ googleSearch: {} }], thinkingConfig: { thinkingBudget: 16000 } },
+      config: { tools: [{ googleSearch: {} }] },
     });
 
     const jsonText = cleanJsonString(response.text ?? "{}");
@@ -197,14 +197,15 @@ export const searchSimilarImporters = async (query: string): Promise<ImporterSum
   try {
     const prompt = `CURRENT DATE: ${today}. Find competitors for: "${query}". Return JSON: { "importers": [ { "importerName": "Name", "location": "...", "primaryCommodities": "...", "lastShipmentDate": "..." } ] }`;
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: prompt,
         config: { tools: [{ googleSearch: {} }] },
     });
 
     const parsed = JSON.parse(cleanJsonString(response.text ?? "{}"));
     return (parsed.importers || []).map((imp: any) => ({ ...imp }));
-  } catch (error) {
-    return [];
+  } catch (error: any) {
+    console.error("Error in searchSimilarImporters:", error);
+    throw new Error(error.message || "Failed to search similar importers.");
   }
 };

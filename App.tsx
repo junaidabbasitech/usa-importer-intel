@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { searchImporters, fetchDetailedImporterData, searchSimilarImporters } from './server/services/geminiService';
+import { searchImportersApi, fetchDetailedImporterDataApi, searchSimilarImportersApi } from './server/services/apiClient';
 import { checkBackendHealth } from './server/services/backendService';
 import type { ImporterSummary, DetailedImporterResult, Subscription, Notification, ContactInfo, ParsedImporterData, Theme } from './types';
 import { ImporterCard } from './components/ImporterCard';
@@ -212,8 +212,8 @@ const App: React.FC = () => {
 
     try {
       const [mainResults, similar] = await Promise.allSettled([
-        searchImporters({ query, city, state, industry }),
-        searchSimilarImporters(query || industry)
+        searchImportersApi({ query, city, state, industry }),
+        searchSimilarImportersApi(query || industry)
       ]);
       
       if (mainResults.status === 'fulfilled') {
@@ -284,7 +284,7 @@ const App: React.FC = () => {
     setIsRefreshingDetails(true);
 
     try {
-      const fullData = await fetchDetailedImporterData(importerName, summary);
+      const fullData = await fetchDetailedImporterDataApi(importerName, summary);
       setSelectedImporter(fullData);
     } catch (err: any) {
         setError("Scraping resolution failed for detailed logs.");
@@ -296,7 +296,7 @@ const App: React.FC = () => {
   const handleRefreshDetails = useCallback(async (name: string) => {
     setIsRefreshingDetails(true);
     try {
-        const fullData = await fetchDetailedImporterData(name);
+        const fullData = await fetchDetailedImporterDataApi(name);
         setSelectedImporter(fullData);
     } catch (e) {} finally {
         setIsRefreshingDetails(false);
