@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use the VITE_API_URL for production, or empty string for relative paths in dev
-const API_URL = "";
+const API_URL = "/api";
 
 export const scrapeTraditionalSources = async (query: string) => {
   try {
