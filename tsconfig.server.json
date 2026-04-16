@@ -10,5 +10,6 @@
     "sourceMap": true,
     "noEmit": false
   },
-  "include": ["server/**/*.ts", "types.ts"]
+  "include": ["server/**/*.ts", "types.ts"],
+  "exclude": ["server/services/apiClient.ts", "server/services/backendService.ts"]
 }

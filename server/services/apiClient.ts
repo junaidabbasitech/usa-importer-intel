@@ -1,8 +1,10 @@
 import axios from 'axios';
 import type { ImporterSummary, DetailedImporterResult } from '../../types';
 
-// Use the VITE_API_URL for production, or empty string for relative paths in dev
-const API_URL = "/api";
+// Points at the backend. In local dev this stays "/api" (Vite proxies to Express).
+// In production (e.g. GitHub Pages), set VITE_API_URL at build time to your deployed
+// backend URL, e.g. VITE_API_URL=https://your-backend.onrender.com/api
+const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
 export const searchImportersApi = async (params: { 
   query: string; 
