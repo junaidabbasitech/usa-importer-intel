@@ -25,8 +25,15 @@ app.get("/test", (req, res) => {
   res.json({ message: "Server is working!" });
 });
 
-// Serve frontend static files
-const distPath = path.join(__dirname, "../../dist");
+// Serve frontend static files.
+// In dev (tsx server/server.ts), __dirname = <repo>/server, so "../dist"
+// resolves to <repo>/dist. In prod (node dist/server/server/server.js),
+// __dirname = <repo>/dist/server/server, so "../.." also resolves to
+// <repo>/dist. Both cases point at the Vite build output.
+const distPath = path.join(
+  __dirname,
+  __dirname.includes(`${path.sep}dist${path.sep}server`) ? "../.." : "../dist"
+);
 app.use(express.static(distPath));
 
 // SPA fallback (IMPORTANT)
