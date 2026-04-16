@@ -10,7 +10,12 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    // Allow setting a non-root base path for deploys like GitHub Pages project sites
+    // (e.g. VITE_BASE=/usa-importer-intel/). Defaults to "/" so dev & same-origin
+    // deploys keep working unchanged.
+    const base = env.VITE_BASE || '/';
     return {
+      base,
       server: {
   port: 5173,
   host: '0.0.0.0',
