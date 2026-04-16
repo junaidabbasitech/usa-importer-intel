@@ -30,7 +30,10 @@ const distPath = path.join(__dirname, "../../dist");
 app.use(express.static(distPath));
 
 // SPA fallback (IMPORTANT)
-app.get("/*", (req, res) => {
+// Express 5 / path-to-regexp v8 no longer accepts the bare "/*" pattern,
+// so use a catch-all middleware for unmatched GET routes instead.
+app.use((req, res, next) => {
+  if (req.method !== "GET") return next();
   res.sendFile(path.join(distPath, "index.html"));
 });
 
