@@ -5,7 +5,7 @@ const API_URL = "/api";
 
 export const scrapeTraditionalSources = async (query: string) => {
   try {
-    const response = await axios.get(`${API_URL}/api/scrape`, {
+    const response = await axios.get(`${API_URL}/scrape`, {
       params: { query }
     });
     return response.data;
@@ -17,7 +17,7 @@ export const scrapeTraditionalSources = async (query: string) => {
 
 export const checkBackendHealth = async () => {
   try {
-    const response = await axios.get(`${API_URL}/api/health`);
+    const response = await axios.get(`${API_URL}/health`);
     return response.data;
   } catch (error) {
     console.error('Backend health check failed:', error);

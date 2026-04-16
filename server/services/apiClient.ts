@@ -11,7 +11,7 @@ export const searchImportersApi = async (params: {
   industry: string; 
 }): Promise<ImporterSummary[]> => {
   try {
-    const response = await axios.get(`${API_URL}/api/search-importers`, {
+    const response = await axios.get(`${API_URL}/search-importers`, {
       params: {
         query: params.query,
         city: params.city,
@@ -28,7 +28,7 @@ export const searchImportersApi = async (params: {
 
 export const fetchDetailedImporterDataApi = async (importerName: string, context?: ImporterSummary): Promise<DetailedImporterResult> => {
   try {
-    const response = await axios.get(`${API_URL}/api/importer-details`, {
+    const response = await axios.get(`${API_URL}/importer-details`, {
       params: {
         name: importerName,
         location: context?.location,
@@ -45,7 +45,7 @@ export const fetchDetailedImporterDataApi = async (importerName: string, context
 
 export const searchSimilarImportersApi = async (query: string): Promise<ImporterSummary[]> => {
   try {
-    const response = await axios.get(`${API_URL}/api/similar-importers`, {
+    const response = await axios.get(`${API_URL}/similar-importers`, {
       params: { query }
     });
     return response.data;
