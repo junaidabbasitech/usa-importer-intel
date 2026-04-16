@@ -33,7 +33,7 @@ app.use(express.static(distPath));
 // Express 5 / path-to-regexp v8 no longer accepts the bare "/*" pattern,
 // so use a catch-all middleware for unmatched GET routes instead.
 app.use((req, res, next) => {
-  if (req.method !== "GET") return next();
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
   res.sendFile(path.join(distPath, "index.html"));
 });
 
