@@ -3,7 +3,7 @@ import axios from 'axios';
 // Points at the backend. In local dev this stays "/api" (Vite proxies to Express).
 // In production (e.g. GitHub Pages), set VITE_API_URL at build time to your deployed
 // backend URL, e.g. VITE_API_URL=https://your-backend.onrender.com/api
-const API_URL = import.meta.env.VITE_API_URL ?? "/api";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 export const scrapeTraditionalSources = async (query: string) => {
   try {
